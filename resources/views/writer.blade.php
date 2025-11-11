@@ -2,7 +2,39 @@
 
 @section('container')
     <div class="row mt-3">
-        @foreach ($posts as $post)
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow border-0 mb-4">
+                <div class="card-body p-5 text-center">
+                    <div class="writer-profile mb-4">
+                        <img src="https://randomuser.me/api/portraits/{{ rand(0,1) ? 'men' : 'women' }}/{{ $writer->id + 10 }}.jpg" 
+                             class="rounded-circle shadow mb-3" 
+                             alt="{{ $writer->name }}" 
+                             style="width: 150px; height: 150px; object-fit: cover; border: 4px solid #f8f9fa;">
+                        <h2 class="fw-bold text-primary">{{ $writer->name }}</h2>
+                        <p class="text-muted mb-3">
+                            <i class="fas fa-star text-warning me-1"></i>
+                            {{ $writer->specialty }}
+                        </p>
+                        <div class="writer-stats">
+                            <span class="badge bg-primary me-2">
+                                <i class="fas fa-newspaper me-1"></i>
+                                {{ $writer->posts->count() }} Articles
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-4 text-center">Articles by {{ $writer->name }}</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        @forelse ($posts as $post)
             <div class="col-lg-6 mb-4">
                 <div class="card post-card h-100 shadow-sm border-0 overflow-hidden" style="transition: transform 0.3s ease, box-shadow 0.3s ease;">
                     <div class="row g-0 h-100">
@@ -38,8 +70,8 @@
                                     <h5 class="card-title fw-bold text-primary mb-3">{{ $post->title }}</h5>
                                     
                                     <div class="text-muted small mb-3">
-                                        <i class="fas fa-user me-1"></i>
-                                        By: <a href="/writers/{{ $post->writer->id }}" class="text-decoration-none">{{ $post->writer->name }}</a>
+                                        <i class="fas fa-folder me-1"></i>
+                                        <a href="/categories/{{ $post->category->slug }}" class="text-decoration-none">{{ $post->category->name }}</a>
                                         <br>
                                         <i class="fas fa-clock me-1"></i>
                                         {{ \Carbon\Carbon::parse($post->published_at)->diffForHumans() }}
@@ -58,16 +90,20 @@
                     </div>
                 </div>
             </div>
-        @endforeach
+        @empty
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No articles found</h4>
+                <p class="text-muted">This writer hasn't published any articles yet.</p>
+            </div>
+        @endforelse
     </div>
-    
-    @if($posts->isEmpty())
-        <div class="text-center py-5">
-            <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
-            <h4 class="text-muted">No articles found in this category</h4>
-            <p class="text-muted">Check back later for new content!</p>
-        </div>
-    @endif
+
+    <div class="text-center mt-4">
+        <a href="/writers" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Writers
+        </a>
+    </div>
 
     <style>
         .post-card:hover {

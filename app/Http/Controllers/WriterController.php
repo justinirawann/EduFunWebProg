@@ -20,8 +20,9 @@ class WriterController extends Controller
     public function show(Writer $writer)
     {
        
-        return view('posts', [
+        return view('writer', [
             'title' => 'Articles by: ' . $writer->name,
+            'writer' => $writer,
             'posts' => $writer->posts()->with(['writer', 'category'])->get()
         ]);
     }
