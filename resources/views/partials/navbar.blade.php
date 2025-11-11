@@ -20,9 +20,20 @@
                         <i class="fas fa-list me-1"></i>Categories
                     </a>
                     <ul class="dropdown-menu shadow" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/categories">
+                            <i class="fas fa-th-large me-2"></i>All Categories
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
                         @foreach(App\Models\Category::all() as $category)
                             <li><a class="dropdown-item" href="/categories/{{ $category->slug }}">
-                                <i class="fas fa-tag me-2"></i>{{ $category->name }}
+                                @if($category->slug == 'interactive-multimedia')
+                                    <i class="fas fa-desktop me-2"></i>
+                                @elseif($category->slug == 'software-engineering')
+                                    <i class="fas fa-code me-2"></i>
+                                @else
+                                    <i class="fas fa-tag me-2"></i>
+                                @endif
+                                {{ $category->name }}
                             </a></li>
                         @endforeach
                     </ul>
@@ -30,6 +41,11 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('writers*') ? 'active fw-bold' : '' }}" href="/writers">
                         <i class="fas fa-users me-1"></i>Writers
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('popular') ? 'active fw-bold' : '' }}" href="/popular">
+                        <i class="fas fa-fire me-1"></i>Popular
                     </a>
                 </li>
                 <li class="nav-item">
